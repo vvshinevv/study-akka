@@ -37,7 +37,7 @@ object ChangingActorBehavior extends App {
 
     private def happyReceive: Receive = {
       case Food(VEGETABLE) => context.become(sadReceive, false) // change my receive handler to sadReceive , true means discard the old message handler so fully replace the old message handler with a new message handler.
-      case Food(CHOCOLATE) => //
+      case Food(CHOCOLATE) => context.unbecome()
       case Ask(_)          => sender() ! KidAccept
     }
     private def sadReceive: Receive = {
@@ -69,6 +69,10 @@ object ChangingActorBehavior extends App {
         // test our interaction
         kidRef ! Food(VEGETABLE)
         kidRef ! Food(VEGETABLE)
+        kidRef ! Food(CHOCOLATE)
+        kidRef ! Food(CHOCOLATE)
+        kidRef ! Food(CHOCOLATE)
+        kidRef ! Food(CHOCOLATE)
         kidRef ! Food(CHOCOLATE)
         kidRef ! Ask("do you want to play?")
       case KidAccept => println("Yah, my kid is happy")

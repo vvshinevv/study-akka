@@ -81,12 +81,4 @@ object ActorCapabilities extends App {
   // C thinks the sender() of message M is A.
   private case class WirelessPhoneMessage(content: String, ref: ActorRef)
   alice ! WirelessPhoneMessage("Hi", bob)
-
-  /**
-   * Exercise
-   * 1. a Counter actor
-   *  - Increment
-   *  - Decrement
-   */
-
 }
