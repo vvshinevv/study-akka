@@ -6,12 +6,12 @@ import part2actors.ChildActors.CreditCard.{AttachToAccount, CheckStatus}
 object ChildActors extends App {
 
   // Actors can create other actors
-  object Parent {
+  private object Parent {
     case class CreateChild(name: String)
     case class TellChild(message: String)
   }
 
-  class Parent extends Actor {
+  private class Parent extends Actor {
     import Parent._
 
     override def receive: Receive = {
