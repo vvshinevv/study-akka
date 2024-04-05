@@ -6,7 +6,7 @@ import org.scalatest.{BeforeAndAfterAll, WordSpecLike}
 
 class InterceptingLogSpec extends TestKit(ActorSystem("InterceptingLogSpec")) with ImplicitSender with WordSpecLike with BeforeAndAfterAll {
 
-  def afterAll(): Unit = {
+  override def afterAll(): Unit = {
     TestKit.shutdownActorSystem(system)
   }
 }
