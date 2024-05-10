@@ -52,7 +52,7 @@ object Routers extends App {
       // Second you need to define your router based on supported router logic and we are going to discuss what routing logics are available based off the slaves that you've just created in step one.
       // Third you need to handle the messages so you need to forward that to the router by calling router.route and you can pass in the message and the sender of that message. so that your slaves know who to respond to. You can pass in yourself if you want.
       // if you want to be the middleman but often we pass in sender.
-      // Step four we need to handle the lifecycle of our routees by in this case just removing the routee, creating a new one and registering for its death watch and just putting it back in router.
+      // Step four we need to handle the lifecycle of our routees by in this case just removing the routee, creating a new one and registering for its death watch and just putting it back in router. //  경우에 루티를 제거하고 새로운 루티를 생성한 다음, 그 루티의 생명 주기를 감시하고 라우터에 다시 추가하는 방식으로 우리의 루티들의 생명 주기를 관리해야 합니다.
 
       // Supported options for routing logic:
       // - round-robin
