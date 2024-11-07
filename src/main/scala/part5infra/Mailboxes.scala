@@ -5,7 +5,7 @@ import akka.dispatch.{ControlMessage, PriorityGenerator, UnboundedPriorityMailbo
 import com.typesafe.config.{Config, ConfigFactory}
 
 object Mailboxes extends App {
-  val system = ActorSystem("MailboxDemo", ConfigFactory.load().getConfig("mailboxesDemo"))
+
   class SimpleActor extends Actor with ActorLogging {
     override def receive: Receive = {
       case message => log.info(message.toString)
@@ -31,7 +31,8 @@ object Mailboxes extends App {
 
   // step2 - make it known in the config
   // step3 - attach the dispatcher to an actor
-
+//  val system = ActorSystem("StashDemo")
+  val system = ActorSystem("MailboxDemo", ConfigFactory.load().getConfig("mailBoxesDemo"))
   val supportTicketLogger = system.actorOf(Props[SimpleActor].withDispatcher("support-ticket-dispatcher"))
   supportTicketLogger ! PoisonPill // 그래도 순서대로 실행 됨
   Thread.sleep(1000) //
@@ -46,11 +47,11 @@ object Mailboxes extends App {
   // 따라서 Thread.sleep 이후에 보내진 메시지들은 [P0], [P1], [P3] 순으로 처리됩니다. PoisonPill은 일반적인 메시지 처리 후 종료 시그널로 작용하며, 이 경우 우선 순위에 따라 처리되기 전에 종료되지 않는 이상, 남은 메시지들은 모두 정상적으로 처리됩니다.
 
   /**
-   * Interesting case #2 - control aware mailbox
-   * some messages need to be processed first regardless of what's been queued up in the mailbox for example a management ticket for out ticketingSystem that we saw above
-   * and for this one we don't need to implement a custom mailbox we'll just use the unbounded control aware mailbox
-   * so we'll use UnboundedControlAwareMailbox - unbounded means it theoretically has no bounds, bounded means it only can store like millions of messages
-   */
+    * Interesting case #2 - control aware mailbox
+    * some messages need to be processed first regardless of what's been queued up in the mailbox for example a management ticket for out ticketingSystem that we saw above
+    * and for this one we don't need to implement a custom mailbox we'll just use the unbounded control aware mailbox
+    * so we'll use UnboundedControlAwareMailbox - unbounded means it theoretically has no bounds, bounded means it only can store like millions of messages
+    */
   // step 1 - mark important message as control messages
   case object ManagementTicket extends ControlMessage // Akka에서 ControlMessage는 특별한 유형의 메시지로 정의되며, 일반 메시지보다 높은 우선순위를 가집니다. 이를 사용하는 주된 목적은 시스템이나 네트워크 제어와 관련된 중요한 작업을 처리하는 데 있습니다. 예를 들어, PoisonPill과 같은 시스템 제어 메시지도 ControlMessage의 일종입니다. ControlMessage는 메시지 큐에서 일반 메시지보다 우선 처리되어야 할 때 사용됩니다. 이는 시스템이 긴급하게 반응해야 하는 상황에서 유용하며, 액터가 다량의 메시지를 처리 중일 때도 중요한 제어 메시지를 빠르게 인식하고 반응할 수 있도록 돕습니다. 시스템 모니터링, 긴급 수정, 중요한 상태 업데이트 등의 작업을 ManagementTicket을 통해 처리할 수 있습니다.
 
@@ -62,9 +63,9 @@ object Mailboxes extends App {
 //  controlAwareActor ! ManagementTicket
 
   // method #2 - using deployment config
-  val altControlWareActor = system.actorOf(Props[SimpleActor], "altControlWareActor")
-  altControlWareActor ! "[P0] this needs to be solved NOW!"
-  altControlWareActor ! "[P1] do this when you have the time"
-  altControlWareActor ! ManagementTicket
+//  val altControlWareActor = system.actorOf(Props[SimpleActor], "altControlWareActor")
+//  altControlWareActor ! "[P0] this needs to be solved NOW!"
+//  altControlWareActor ! "[P1] do this when you have the time"
+//  altControlWareActor ! ManagementTicket
 
 }
