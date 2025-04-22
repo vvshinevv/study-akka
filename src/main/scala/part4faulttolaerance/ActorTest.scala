@@ -4,7 +4,6 @@ import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, OneForOneStrategy
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
-import scala.util.Random
 
 object ActorTest extends App {
 
@@ -33,10 +32,7 @@ object ActorTest extends App {
         childActor ! ProcessMessage(msg)
 
       case ChildFailed(msg, attempt, child) =>
-        val baseDelay = 2.seconds
-        val factor = 0.5 + Random.nextDouble() // 0.5 <= factor < 1.5
-        val randomDelay = baseDelay + factor
-        context.system.scheduler.scheduleOnce(randomDelay, child, ProcessMessage(msg, attempt + 1))
+        context.system.scheduler.scheduleOnce(2.seconds, child, ProcessMessage(msg, attempt + 1))
     }
   }
 
